@@ -3,6 +3,7 @@ package global
 import (
 	"encoding/json"
 	"io/ioutil"
+	"strings"
 )
 
 type Account struct {
@@ -29,7 +30,7 @@ func LoadAccountsFromFile(filePath string) error {
 	AddressToNameMap = make(map[string]string)
 
 	for _, account := range accounts {
-		AddressToNameMap[account.Address] = account.Name
+		AddressToNameMap[strings.ToLower(account.Address)] = account.Name
 	}
 
 	return nil

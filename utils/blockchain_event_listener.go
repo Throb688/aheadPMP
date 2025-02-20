@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"log"
 	"math/big"
+	"strings"
 	"time"
 )
 
@@ -57,14 +58,26 @@ func FindOldEvent() {
 		}
 		timestamp := time.Unix(int64(block.Time()), 0)
 
+		ownerFromName := global.AddressToNameMap[strings.ToLower(event.From.Hex())]
+		if ownerFromName == "" {
+			ownerFromName = "未知"
+		}
+
+		ownerToName := global.AddressToNameMap[strings.ToLower(event.To.Hex())]
+		if ownerToName == "" {
+			ownerToName = "未知"
+		}
+
 		// 保存事件数据到全局变量
 		transferEvent := global.TransferEventData{
-			From:        event.From,
-			To:          event.To,
-			Value:       event.Value,
-			TxHash:      txHash,
-			BlockNumber: blockNumber,
-			Timestamp:   timestamp,
+			From:          event.From,
+			To:            event.To,
+			Value:         event.Value,
+			TxHash:        txHash,
+			BlockNumber:   blockNumber,
+			Timestamp:     timestamp,
+			FromOwnerName: ownerFromName,
+			ToOwnerName:   ownerToName,
 		}
 
 		global.TransferEvents = append(global.TransferEvents, transferEvent)
@@ -114,28 +127,31 @@ func ListenEvent() {
 			}
 			timestamp := time.Unix(int64(block.Time()), 0)
 
+			ownerFromName := global.AddressToNameMap[strings.ToLower(event.From.Hex())]
+			if ownerFromName == "" {
+				ownerFromName = "未知"
+			}
+
+			ownerToName := global.AddressToNameMap[strings.ToLower(event.To.Hex())]
+			if ownerToName == "" {
+				ownerToName = "未知"
+			}
+
 			// 保存事件数据到全局变量
 			transferEvent := global.TransferEventData{
-				From:        event.From,
-				To:          event.To,
-				Value:       event.Value,
-				TxHash:      txHash,
-				BlockNumber: blockNumber,
-				Timestamp:   timestamp,
+				From:          event.From,
+				To:            event.To,
+				Value:         event.Value,
+				TxHash:        txHash,
+				BlockNumber:   blockNumber,
+				Timestamp:     timestamp,
+				FromOwnerName: ownerFromName,
+				ToOwnerName:   ownerToName,
 			}
 
 			// 保存到全局事件列表
 			global.TransferEvents = append(global.TransferEvents, transferEvent)
 
-			//// 输出日志
-			//fmt.Printf("Transfer Event: From=%s, To=%s, Value=%s, TxHash=%s, BlockNumber=%d, Timestamp=%s\n",
-			//	event.From.Hex(),
-			//	event.To.Hex(),
-			//	event.Value.String(),
-			//	txHash.Hex(),
-			//	blockNumber,
-			//	timestamp.String(),
-			//)
 		}
 	}
 }
