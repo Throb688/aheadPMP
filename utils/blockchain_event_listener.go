@@ -72,7 +72,7 @@ func FindOldEvent() {
 		transferEvent := global.TransferEventData{
 			From:          event.From,
 			To:            event.To,
-			Value:         event.Value,
+			Value:         FormatBalanceToETH(event.Value),
 			TxHash:        txHash,
 			BlockNumber:   blockNumber,
 			Timestamp:     timestamp,
@@ -141,7 +141,7 @@ func ListenEvent() {
 			transferEvent := global.TransferEventData{
 				From:          event.From,
 				To:            event.To,
-				Value:         event.Value,
+				Value:         FormatBalanceToETH(event.Value),
 				TxHash:        txHash,
 				BlockNumber:   blockNumber,
 				Timestamp:     timestamp,
