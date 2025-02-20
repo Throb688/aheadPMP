@@ -9,8 +9,8 @@ func GetEventData() []global.TransferEventData {
 	return global.GetTransferEvents()
 }
 
-func SearchForEventData(_data string) []global.TransferEventData {
-	var result []global.TransferEventData
+func SearchForEventData(_data string) ([]global.TransferEventData, []global.TransferEventData) {
+	var expensesResult, incomeResult []global.TransferEventData
 	address := _data
 
 	if len(_data) != 42 {
@@ -24,10 +24,13 @@ func SearchForEventData(_data string) []global.TransferEventData {
 	address = strings.ToLower(address)
 
 	for _, v := range global.GetTransferEvents() {
-		if strings.ToLower(v.From.Hex()) == address || strings.ToLower(v.To.Hex()) == address {
-			result = append(result, v)
+		if strings.ToLower(v.From.Hex()) == address {
+			expensesResult = append(expensesResult, v)
+		}
+		if strings.ToLower(v.To.Hex()) == address {
+			incomeResult = append(incomeResult, v)
 		}
 	}
 
-	return result
+	return expensesResult, incomeResult
 }

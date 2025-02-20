@@ -20,7 +20,7 @@ func (e EventController) EventData(c *gin.Context) {
 
 func (e EventController) SearchForEvent(c *gin.Context) {
 	query := c.Query("q")
-	result := services.SearchForEventData(query)
-	utils.Success(c, map[string]interface{}{"code": int(utils.ApiCode.SUCCESS), "msg": result})
+	expensesResult, incomeResult := services.SearchForEventData(query)
+	utils.Success(c, map[string]interface{}{"code": int(utils.ApiCode.SUCCESS), "expenses": expensesResult, "income": incomeResult})
 	return
 }
